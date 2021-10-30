@@ -1,0 +1,36 @@
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { StatusTransaction } from './status-transaction.entity';
+import { StatusTransactionService } from './status-transaction.service';
+
+@Controller('status-transaction')
+export class StatusTransactionController {
+    constructor(
+        private service: StatusTransactionService
+    ) { }
+    @Get()
+    @UseGuards(AuthGuard('jwt'))
+    async getall() {
+        return await this.service.getAll();
+    }
+    @Get('/:id')
+    @UseGuards(AuthGuard('jwt'))
+    async getById(@Param('id') id: number) {
+        return await this.service.getById(id);
+    }
+    @Post()
+    @UseGuards(AuthGuard('jwt'))
+    async create(@Body() model: StatusTransaction) {
+        return await this.service.create(model);
+    }
+    @Put('/:id')
+    @UseGuards(AuthGuard('jwt'))
+    async update(@Param('id') id: number, @Body() model: StatusTransaction) {
+        return await this.service.update(id, model);
+    }
+    @Delete('/:id')
+    @UseGuards(AuthGuard('jwt'))
+    async delete(@Param('id') id: number,) {
+        return await this.service.delete(id);
+    }
+}
